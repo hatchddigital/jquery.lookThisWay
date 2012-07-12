@@ -9,3 +9,18 @@ figure{
 		top:0;
 		left:0;
 	}
+	.look-left img {
+		left: 0;
+	}
+	.look-right img {
+		left: -500px;
+	}
+	.look-top img {
+		left: -1000px;
+	}
+	.look-bottom img {
+		left: -1500px;
+	}
+	.look-middle img {
+		left: -2000px;
+	}

@@ -13,14 +13,14 @@
 
     $.fn.pictureFollow = function pictureFollow(settings) {
 
-        var grid = settings.grid || 4; // Allow different grid setups depending on your image size
+        settings = settings || {};
 
         $(this).each(function() {
 
-            var $that = this
-              , elemWidth = this.width // the width of the image to use as block
-              , elemHeight = this.height // the height of the image to use as a blcok
-              , elemOffset = this.offset();  // coordinates of the block
+            var $that = $(this)
+              , elemWidth = $that.width() // the width of the image to use as block
+              , elemHeight = $that.height() // the height of the image to use as a blcok
+              , elemOffset = $that.offset();  // coordinates of the block
 
             // On each cursor move
             $(window).mousemove(function(event) {
@@ -28,12 +28,12 @@
                 /* @todo Write some efficient code here by only allowing
                  * a change every X amount of time, .doTimeout likely */
 
-                if (event.pageY <= elemOffset.top &&
-                  event.pageY >= elemOffset.top + elemHeight &&
+                if (event.pageY >= elemOffset.top &&
+                  event.pageY <= elemOffset.top + elemHeight &&
                   event.pageX >= elemOffset.left &&
-                  event.pageY <= elemOffset.left + elemWidth) {
+                  event.pageX <= elemOffset.left + elemWidth) {
 
-                    // Show front facing image
+                    $that.removeClass('look-top look-left look-right look-bottom').addClass('look-middle');
 
                 }
 
@@ -41,12 +41,15 @@
                   event.pageX <= elemOffset.left + elemWidth) {
 
                     // Show top facing image
+                    $that.removeClass('look-middle look-left look-right look-bottom').addClass('look-top');
+
                 }
 
                 else if (event.pageY > elemOffset.top &&
                   event.pageX < elemOffset.left) {
 
                     // show left facing image
+                    $that.removeClass('look-middle look-top look-right look-bottom').addClass('look-left');
 
                 }
 
@@ -54,14 +57,15 @@
                   event.pageX > elemOffset.left) {
 
                     // show bottom facing image
+                    $that.removeClass('look-middle look-top look-left look-right').addClass('look-bottom');
 
                 }
 
-                else if (event.pageY < elemOffset.top + elemHeight &&
-                  event.pageX > elemOffset.left + elemWidth) {
+                else if (event.pageY > elemOffset.top &&
+                  event.pageX > (elemOffset.left + elemWidth)) {
 
                     // show right facing image
-
+                    $that.removeClass('look-middle look-top look-left look-bottom').addClass('look-right');
                 }
 
             });
