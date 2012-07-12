@@ -5,9 +5,18 @@
 		<title>Look This way: demo</title>
 		<link rel="stylesheet" href="css/jquery.lookThisWay.css" />
 		<link rel="stylesheet" href="css/demo.css" />
+		<script src="js/jquery.js"></script>
 		<script src="js/jquery.lookThisWay.js"></script>
+		<script>
+			$(document).ready(function(){
+				var $lookElem = $(".look");
+				$lookElem.pictureFollow();
+			});
+		</script>
 	</head>
 	<body>
-		
+		<figure class="look">
+			<img src="images/example.png" alt="Example" />
+		</figure>
 	</body>	
 </html>
