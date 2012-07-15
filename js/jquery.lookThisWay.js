@@ -7,6 +7,7 @@
  *
  * @author Jimmy Hillis <jimmy@hatchd.com.au>
  * @author Jack Armley <jack@hatchd.com.au>
+ *
  */
 
 (function($){
@@ -15,11 +16,26 @@
 
         settings = settings || {};
 
+        /**
+         * This function removes all lookThisWay based classes and
+         * returns the element to become chainable
+         */
+        var removeLookClasses = function removeLookClasses($element) {
+          // list of all classes this plugin uses
+          var classes = "look-top-left look-top look-top-middle look-top-right "
+                      + "look-left look-middle-left look-middle "
+                      + "look-middle-right look-right look-bottom-left "
+                      + "look-bottom look-bottom-middle look-bottom-right";
+          // remove them all
+          $element.removeClass(classes);
+          return $element;
+        };
+
         $(this).each(function() {
 
             var $that = $(this)
-              , elemWidth = $that.width() // the width of the image to use as block
-              , elemHeight = $that.height() // the height of the image to use as a blcok
+              , elemWidth = $that.width() // the width of the element used
+              , elemHeight = $that.height() // the height of ""
               , elemOffset = $that.offset();  // coordinates of the block
 
             // On each cursor move
@@ -28,44 +44,96 @@
                 /* @todo Write some efficient code here by only allowing
                  * a change every X amount of time, .doTimeout likely */
 
-                if (event.pageY >= elemOffset.top &&
+                /* Top left box */
+
+                if (event.pageY < elemOffset.top &&
+                  event.pageX < elemOffset.left) {
+
+                    // Show top facing image
+                    removeLookClasses($that).addClass('look-top look-top-left');
+
+                }
+
+                /* Top middle box */
+
+                else if (event.pageY < elemOffset.top &&
+                  event.pageX < elemOffset.left + elemWidth) {
+
+                    // Show top facing image
+                    removeLookClasses($that).addClass('look-top look-top-middle');
+
+                }
+
+                /* Top right box */
+
+                else if (event.pageY < elemOffset.top &&
+                  event.pageX > elemOffset.left + elemWidth) {
+
+                    // Show top facing image
+                    removeLookClasses($that).addClass('look-right look-top-right');
+
+                }
+
+                /* Middle left box */
+
+                else if (event.pageY > elemOffset.top &&
+                  event.pageX < elemOffset.left &&
+                  event.pageY < elemOffset.top + elemHeight) {
+
+                    // show left facing image
+                    removeLookClasses($that).addClass('look-left look-middle-left');
+
+                }
+
+                /* Middle (on the element itself) */
+
+                else if (event.pageY >= elemOffset.top &&
                   event.pageY <= elemOffset.top + elemHeight &&
                   event.pageX >= elemOffset.left &&
                   event.pageX <= elemOffset.left + elemWidth) {
 
-                    $that.removeClass('look-top look-left look-right look-bottom').addClass('look-middle');
+                    removeLookClasses($that).addClass('look-middle');
 
                 }
 
-                else if (event.pageY < elemOffset.top &&
-                  event.pageX <= elemOffset.left + elemWidth) {
-
-                    // Show top facing image
-                    $that.removeClass('look-middle look-left look-right look-bottom').addClass('look-top');
-
-                }
+                /* Middle right box */
 
                 else if (event.pageY > elemOffset.top &&
-                  event.pageX < elemOffset.left) {
+                  event.pageX > elemOffset.left + elemWidth) {
 
                     // show left facing image
-                    $that.removeClass('look-middle look-top look-right look-bottom').addClass('look-left');
+                    removeLookClasses($that).addClass('look-right look-middle-right');
 
                 }
+
+                /* Bottom left box */
 
                 else if (event.pageY > elemOffset.top + elemHeight &&
-                  event.pageX > elemOffset.left) {
+                  event.pageX < elemOffset.left) {
 
                     // show bottom facing image
-                    $that.removeClass('look-middle look-top look-left look-right').addClass('look-bottom');
+                    removeLookClasses($that).addClass('look-bottom look-bottom-left');
 
                 }
 
-                else if (event.pageY > elemOffset.top &&
-                  event.pageX > (elemOffset.left + elemWidth)) {
+                /* Bottom middle box */
+
+                else if (event.pageY > elemOffset.top + elemHeight &&
+                  event.pageX >= elemOffset.left &&
+                  event.pageX <= elemOffset.left + elemWidth) {
+
+                    // show bottom facing image
+                    removeLookClasses($that).addClass('look-bottom');
+
+                }
+
+                /* Bottom right box */
+
+                else if (event.pageY > elemOffset.top + elemHeight &&
+                  event.pageX > elemOffset.left + elemWidth) {
 
                     // show right facing image
-                    $that.removeClass('look-middle look-top look-left look-bottom').addClass('look-right');
+                    removeLookClasses($that).addClass('look-right look-bottom-right');
                 }
 
             });
